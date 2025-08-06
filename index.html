@@ -10,7 +10,13 @@
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>有趣实用工具箱</h1>
+    <div style="display:flex;align-items:center;gap:18px;margin-bottom:18px;">
+      <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f680.svg" alt="logo" style="width:56px;height:56px;">
+      <div>
+        <h1 style="margin:0;">有趣实用工具箱</h1>
+        <div id="dynamic-intro" style="color:#2d8cf0;font-size:1.1em;"></div>
+      </div>
+    </div>
     <p>一个前沿、实用、有趣的静态网站，帮你提升效率、激发灵感、享受生活。</p>
     <ul class="feature-list">
       <li><a href="calculator.html">智能计算器</a></li>
@@ -23,5 +29,23 @@
     </ul>
   </main>
   <footer>© 2024 有趣实用工具箱</footer>
+  <script>
+const intros = [
+  '🌟 让效率与乐趣并存',
+  '🧮 计算、管理、创意一站式',
+  '🎲 轻松小游戏，随时放松',
+  '🧠 记忆卡片，助力学习',
+  '🎨 随机灵感，激发创造力',
+  '🔒 实用工具，安全可靠',
+  '🌙 支持深色模式，护眼更贴心'
+];
+let idx = 0;
+function showIntro() {
+  document.getElementById('dynamic-intro').textContent = intros[idx];
+  idx = (idx+1)%intros.length;
+}
+showIntro();
+setInterval(showIntro, 2200);
+</script>
 </body>
 </html> 

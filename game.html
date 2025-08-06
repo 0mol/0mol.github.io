@@ -6,6 +6,15 @@
   <title>小游戏 - 有趣实用工具箱</title>
   <link rel="stylesheet" href="css/style.css">
   <script defer src="js/nav.js"></script>
+  <script defer src="js/game.js"></script>
+  <style>
+    .game-section { margin-bottom: 32px; }
+    .game-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; margin-right: 10px; }
+    .game-btn:hover { background: #1769aa; }
+    #fruit-area { width: 100%; max-width: 350px; height: 350px; background: #f0f4fa; border-radius: 12px; margin: 18px auto; position: relative; overflow: hidden; }
+    .fruit { width: 40px; height: 40px; background: #ff7675; border-radius: 50%; position: absolute; left: 50%; top: 90%; box-shadow: 0 2px 8px #d63031; cursor: pointer; transition: background 0.2s; }
+    .fruit:hover { background: #fdcb6e; }
+  </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
@@ -13,8 +22,13 @@
     <h1>小游戏</h1>
     <p>轻松休闲小游戏，放松你的大脑，激发创造力。</p>
     <div id="game-app">
-      <!-- 小游戏功能区，后续实现 -->
-      <p style="color:#888;">功能开发中，敬请期待！</p>
+      <section class="game-section">
+        <h2>切西瓜</h2>
+        <button class="game-btn" id="start-fruit-btn">开始游戏</button>
+        <div id="fruit-area"></div>
+        <p>点击水果切掉，15秒计分，看看你能得多少分！</p>
+      </section>
+      <!-- 2048/贪吃蛇/反应力测试结构预留，可后续补充 -->
     </div>
   </main>
   <footer>© 2024 有趣实用工具箱</footer>

@@ -10,4 +10,20 @@ fetch('components/nav.html')
         link.classList.add('active');
       }
     });
+    // 主题切换按钮
+    let themeBtn = document.createElement('button');
+    themeBtn.textContent = document.body.classList.contains('dark') ? '☀️ 浅色' : '🌙 深色';
+    themeBtn.style.marginLeft = '18px';
+    themeBtn.style.background = 'none';
+    themeBtn.style.border = 'none';
+    themeBtn.style.cursor = 'pointer';
+    themeBtn.style.fontSize = '1.1em';
+    themeBtn.onclick = () => {
+      document.body.classList.toggle('dark');
+      themeBtn.textContent = document.body.classList.contains('dark') ? '☀️ 浅色' : '🌙 深色';
+      localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : '');
+    };
+    document.querySelector('.navbar').appendChild(themeBtn);
+    // 自动读取主题
+    if(localStorage.getItem('theme')==='dark') document.body.classList.add('dark');
   }); 

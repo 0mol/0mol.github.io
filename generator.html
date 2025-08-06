@@ -6,6 +6,15 @@
   <title>创意生成器 - 有趣实用工具箱</title>
   <link rel="stylesheet" href="css/style.css">
   <script defer src="js/nav.js"></script>
+  <script defer src="js/generator.js"></script>
+  <style>
+    .gen-section { margin-bottom: 32px; }
+    .gen-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; margin-right: 10px; }
+    .gen-btn:hover { background: #1769aa; }
+    .gen-color-show { width: 120px; height: 40px; display: inline-block; border-radius: 6px; line-height: 40px; text-align: center; font-weight: bold; margin-left: 10px; }
+    .gen-pwd-show { width: 180px; }
+    .gen-emoji-show { font-size: 2em; margin-left: 10px; }
+  </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
@@ -13,8 +22,41 @@
     <h1>创意生成器</h1>
     <p>随机颜色、密码、灵感等创意工具，激发你的无限可能。</p>
     <div id="generator-app">
-      <!-- 创意生成器功能区，后续实现 -->
-      <p style="color:#888;">功能开发中，敬请期待！</p>
+      <section class="gen-section">
+        <h2>随机颜色</h2>
+        <button class="gen-btn" id="gen-color-btn">生成颜色</button>
+        <span class="gen-color-show" id="gen-color-show">#ffffff</span>
+      </section>
+      <section class="gen-section">
+        <h2>随机密码</h2>
+        <label>长度：</label>
+        <input type="number" id="gen-pwd-len" value="12" min="4" max="32" style="width:60px;">
+        <button class="gen-btn" id="gen-pwd-btn">生成密码</button>
+        <input class="gen-pwd-show" id="gen-pwd-show" readonly>
+      </section>
+      <section class="gen-section">
+        <h2>灵感生成</h2>
+        <button class="gen-btn" id="gen-idea-btn">来点灵感</button>
+        <span id="gen-idea-show"></span>
+      </section>
+      <section class="gen-section">
+        <h2>昵称生成</h2>
+        <button class="gen-btn" id="gen-nick-btn">生成昵称</button>
+        <span id="gen-nick-show"></span>
+      </section>
+      <section class="gen-section">
+        <h2>Emoji组合</h2>
+        <button class="gen-btn" id="gen-emoji-btn">生成Emoji</button>
+        <span class="gen-emoji-show" id="gen-emoji-show"></span>
+      </section>
+      <section class="gen-section">
+        <h2>随机数/抽签</h2>
+        <label>区间：</label>
+        <input type="number" id="gen-rand-min" value="1" style="width:60px;"> -
+        <input type="number" id="gen-rand-max" value="100" style="width:60px;">
+        <button class="gen-btn" id="gen-rand-btn">生成</button>
+        <span id="gen-rand-show"></span>
+      </section>
     </div>
   </main>
   <footer>© 2024 有趣实用工具箱</footer>

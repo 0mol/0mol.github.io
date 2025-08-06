@@ -6,6 +6,14 @@
   <title>二维码生成器 - 有趣实用工具箱</title>
   <link rel="stylesheet" href="css/style.css">
   <script defer src="js/nav.js"></script>
+  <script defer src="js/qrcode.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    .qr-section { margin-bottom: 32px; }
+    .qr-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; margin-right: 10px; }
+    .qr-btn:hover { background: #1769aa; }
+    #qr-canvas { background: #fff; border-radius: 8px; margin-top: 10px; }
+  </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
@@ -13,8 +21,13 @@
     <h1>二维码生成器</h1>
     <p>快速将文本、链接等内容生成二维码，便于分享和保存。</p>
     <div id="qrcode-app">
-      <!-- 二维码功能区，后续实现 -->
-      <p style="color:#888;">功能开发中，敬请期待！</p>
+      <section class="qr-section">
+        <input type="text" id="qr-input" placeholder="输入文本或链接..." style="width:300px;">
+        <button class="qr-btn" id="qr-btn">生成二维码</button>
+        <a class="qr-btn" id="qr-download" style="display:none;" href="#">下载二维码</a>
+        <br>
+        <canvas id="qr-canvas" width="200" height="200"></canvas>
+      </section>
     </div>
   </main>
   <footer>© 2024 有趣实用工具箱</footer>
