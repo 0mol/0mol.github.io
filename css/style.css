@@ -4,6 +4,7 @@ body {
   background: var(--bg, #f7f8fa);
   color: var(--text, #222);
   transition: background 0.3s, color 0.3s;
+  line-height: 1.6;
 }
 
 :root {
@@ -15,6 +16,10 @@ body {
   --panel-shadow: 0 2px 16px rgba(0,0,0,0.06);
   --panel-radius: 16px;
   --panel-border: none;
+  --success: #27ae60;
+  --warning: #f39c12;
+  --error: #e74c3c;
+  --info: #3498db;
 }
 body.dark {
   --primary: #1e90ff;
@@ -24,6 +29,10 @@ body.dark {
   --panel: #23272e;
   --panel-shadow: 0 2px 16px rgba(0,0,0,0.18);
   --panel-border: 1px solid #333;
+  --success: #2ecc71;
+  --warning: #f1c40f;
+  --error: #e74c3c;
+  --info: #3498db;
 }
 
 .container {
@@ -46,11 +55,19 @@ body.dark {
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   height: 60px;
   transition: background 0.3s;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 .nav-logo {
   font-weight: bold;
   font-size: 1.3em;
   color: var(--primary);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.nav-logo:hover {
+  color: var(--primary-dark);
 }
 .nav-links {
   list-style: none;
@@ -58,12 +75,14 @@ body.dark {
   gap: 24px;
   margin: 0;
   padding: 0;
+  flex-wrap: wrap;
 }
 .nav-links a {
   text-decoration: none;
   color: var(--text);
   font-weight: 500;
   transition: color 0.2s;
+  white-space: nowrap;
 }
 .nav-links a.active,
 .nav-links a:hover {
@@ -75,64 +94,97 @@ body.dark {
   padding: 0;
   margin: 32px 0 0 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 18px;
 }
 .feature-list li {
-  background: #f0f4fa;
-  border-radius: 8px;
-  padding: 18px 12px;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 20px;
   text-align: center;
   font-size: 1.1em;
-  transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  border: 1px solid transparent;
 }
 .feature-list li:hover {
-  background: #e6f0ff;
-  box-shadow: 0 4px 16px rgba(45,140,240,0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(45,140,240,0.12);
+  border-color: var(--primary);
 }
 .feature-list a {
   color: var(--primary);
   text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 button, input, select, textarea, a {
-  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s;
+  transition: background 0.2s, color 0.2s, border 0.2s, box-shadow 0.2s, transform 0.2s;
 }
-button:active, .calc-btn:active, .pomodoro-btn:active, .gen-btn:active, .qr-btn:active, .fc-btn:active, .game-btn:active, .txt-btn:active {
+button:active, .calc-btn:active, .pomodoro-btn:active, .gen-btn:active, .qr-btn:active, .fc-btn:active, .game-btn:active, .txt-btn:active, .password-btn:active, .color-btn:active {
   transform: scale(0.97);
 }
 
 input, select, textarea {
   border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 6px;
+  border-radius: 8px;
+  padding: 10px 12px;
   font-size: 1em;
   margin-bottom: 10px;
   background: var(--panel);
   color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-input:focus, textarea:focus {
-  outline: 2px solid var(--primary);
+input:focus, textarea:focus, select:focus {
+  outline: none;
   border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(45,140,240,0.1);
 }
 
 /* 错误提示、空态提示 */
 .error-tip {
-  color: #e74c3c;
-  background: #fff0f0;
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin: 8px 0;
+  color: var(--error);
+  background: rgba(231, 76, 60, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
   font-size: 1em;
+  border-left: 4px solid var(--error);
 }
 .empty-tip {
   color: #888;
-  background: #f7f8fa;
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin: 8px 0;
+  background: var(--bg);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
   font-size: 1em;
+  text-align: center;
+  font-style: italic;
+}
+
+/* 成功提示 */
+.success-tip {
+  color: var(--success);
+  background: rgba(39, 174, 96, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 1em;
+  border-left: 4px solid var(--success);
+}
+
+/* 警告提示 */
+.warning-tip {
+  color: var(--warning);
+  background: rgba(243, 156, 18, 0.1);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin: 12px 0;
+  font-size: 1em;
+  border-left: 4px solid var(--warning);
 }
 
 footer {
@@ -142,21 +194,154 @@ footer {
   font-size: 0.95em;
 }
 
-@media (max-width: 600px) {
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* 选择文本样式 */
+::selection {
+  background: var(--primary);
+  color: white;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
   .container {
-    padding: 10px;
+    margin: 20px 10px 0 10px;
+    padding: 16px;
+    border-radius: 12px;
   }
-  .feature-list {
-    grid-template-columns: 1fr;
-  }
+  
   .navbar {
     flex-direction: column;
     height: auto;
-    padding: 0 10px;
+    padding: 12px 16px;
+    gap: 12px;
   }
+  
   .nav-links {
-    gap: 10px;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
   }
-  h1, h2 { font-size: 1.2em; }
-  button, input, select, textarea { font-size: 1em; }
+  
+  .nav-links a {
+    font-size: 0.9em;
+  }
+  
+  .feature-list {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .feature-list li {
+    padding: 16px;
+    font-size: 1em;
+  }
+  
+  h1, h2 { 
+    font-size: 1.3em; 
+    margin: 16px 0 8px 0;
+  }
+  
+  h3 { 
+    font-size: 1.1em; 
+    margin: 12px 0 6px 0;
+  }
+  
+  button, input, select, textarea { 
+    font-size: 16px; /* 防止iOS缩放 */
+    padding: 12px 16px;
+  }
+  
+  /* 移动端按钮优化 */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 移动端表单优化 */
+  input, select, textarea {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin: 10px 5px 0 5px;
+    padding: 12px;
+  }
+  
+  .navbar {
+    padding: 8px 12px;
+  }
+  
+  .nav-links {
+    gap: 12px;
+  }
+  
+  .nav-links a {
+    font-size: 0.85em;
+  }
+  
+  .feature-list li {
+    padding: 12px;
+  }
+  
+  h1 { font-size: 1.2em; }
+  h2 { font-size: 1.1em; }
+  h3 { font-size: 1em; }
+}
+
+/* 打印样式 */
+@media print {
+  .navbar {
+    display: none;
+  }
+  
+  .container {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    display: none;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  :root {
+    --primary: #0066cc;
+    --text: #000;
+    --bg: #fff;
+    --panel: #fff;
+  }
+  
+  body.dark {
+    --primary: #66b3ff;
+    --text: #fff;
+    --bg: #000;
+    --panel: #000;
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 } 
