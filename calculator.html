@@ -18,26 +18,86 @@
     .calc-result { background: #f0f4fa; border-radius: 6px; padding: 12px; margin-top: 10px; }
     .calc-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; }
     .calc-btn:hover { background: #1769aa; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .tab-icon { width: 16px; height: 16px; margin-right: 6px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
   </style>
   <script defer src="js/calculator.js"></script>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>智能计算器</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="3" width="14" height="14" rx="3" stroke="#2d8cf0" stroke-width="2"/>
+        <rect x="6" y="6" width="8" height="2" rx="1" fill="#2d8cf0"/>
+        <rect x="6" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+        <rect x="10" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+        <rect x="14" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+      </svg>
+      <h1>智能计算器</h1>
+    </div>
     <p>支持基础、科学、房贷、五险一金、纳税、单位换算等多种常用计算，满足你的日常与学习需求。</p>
     <div id="calculator-app">
       <div class="calc-tabs">
-        <button class="calc-tab active" data-tab="basic">基础计算</button>
-        <button class="calc-tab" data-tab="science">科学计算</button>
-        <button class="calc-tab" data-tab="mortgage">房贷计算</button>
-        <button class="calc-tab" data-tab="insurance">五险一金</button>
-        <button class="calc-tab" data-tab="tax">个人所得税</button>
-        <button class="calc-tab" data-tab="unit">单位换算</button>
-        <button class="calc-tab" data-tab="bmi">BMI/健康</button>
-        <button class="calc-tab" data-tab="interest">利息计算</button>
+        <button class="calc-tab active" data-tab="basic">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2"/>
+            <rect x="6" y="6" width="8" height="2" rx="1" fill="currentColor"/>
+            <rect x="6" y="10" width="2" height="2" rx="1" fill="currentColor"/>
+            <rect x="10" y="10" width="2" height="2" rx="1" fill="currentColor"/>
+            <rect x="14" y="10" width="2" height="2" rx="1" fill="currentColor"/>
+          </svg>基础计算
+        </button>
+        <button class="calc-tab" data-tab="science">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>科学计算
+        </button>
+        <button class="calc-tab" data-tab="mortgage">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 12H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>房贷计算
+        </button>
+        <button class="calc-tab" data-tab="insurance">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 6V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 10H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>五险一金
+        </button>
+        <button class="calc-tab" data-tab="tax">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+            <path d="M7 7H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 11H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>个人所得税
+        </button>
+        <button class="calc-tab" data-tab="unit">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <path d="M10 2L3 8H17L10 2Z" stroke="currentColor" stroke-width="2"/>
+            <rect x="3" y="8" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/>
+          </svg>单位换算
+        </button>
+        <button class="calc-tab" data-tab="bmi">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 6V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path d="M6 10H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>BMI/健康
+        </button>
+        <button class="calc-tab" data-tab="interest">
+          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>利息计算
+        </button>
       </div>
       <div class="calc-panel active" id="panel-basic">
+        <div class="usage-tip">💡 支持基础四则运算，如：2+3*4、(1+2)*3</div>
         <form class="calc-form" id="form-basic">
           <label>表达式</label>
           <input type="text" id="basic-exp" placeholder="如 2+3*4">
@@ -46,6 +106,7 @@
         <div class="calc-result" id="result-basic"></div>
       </div>
       <div class="calc-panel" id="panel-science">
+        <div class="usage-tip">💡 支持三角函数、对数、指数等，如：sin(30)+log(10)、2^3</div>
         <form class="calc-form" id="form-science">
           <label>表达式（支持 sin, cos, log, ^ 等）</label>
           <input type="text" id="science-exp" placeholder="如 sin(30)+log(10)">
@@ -54,6 +115,7 @@
         <div class="calc-result" id="result-science"></div>
       </div>
       <div class="calc-panel" id="panel-mortgage">
+        <div class="usage-tip">💡 支持等额本息和等额本金两种还款方式</div>
         <form class="calc-form" id="form-mortgage">
           <label>贷款总额（万元）</label>
           <input type="number" id="mortgage-total" min="1" step="0.01">
@@ -71,6 +133,7 @@
         <div class="calc-result" id="result-mortgage"></div>
       </div>
       <div class="calc-panel" id="panel-insurance">
+        <div class="usage-tip">💡 可根据当地政策调整社保和公积金比例</div>
         <form class="calc-form" id="form-insurance">
           <label>工资基数（元）</label>
           <input type="number" id="insurance-base" min="0">
@@ -83,6 +146,7 @@
         <div class="calc-result" id="result-insurance"></div>
       </div>
       <div class="calc-panel" id="panel-tax">
+        <div class="usage-tip">💡 按最新个税政策计算，支持专项附加扣除</div>
         <form class="calc-form" id="form-tax">
           <label>税前月薪（元）</label>
           <input type="number" id="tax-salary" min="0">
@@ -95,6 +159,7 @@
         <div class="calc-result" id="result-tax"></div>
       </div>
       <div class="calc-panel" id="panel-unit">
+        <div class="usage-tip">💡 支持长度、重量、面积、体积、温度等常用单位换算</div>
         <form class="calc-form" id="form-unit">
           <label>数值</label>
           <input type="number" id="unit-value">
@@ -115,6 +180,7 @@
         <div class="calc-result" id="result-unit"></div>
       </div>
       <div class="calc-panel" id="panel-bmi">
+        <div class="usage-tip">💡 BMI = 体重(kg) / 身高(m)²，健康参考：18.5-24</div>
         <form class="calc-form" id="form-bmi">
           <label>身高（cm）</label>
           <input type="number" id="bmi-height" min="50" max="250">
@@ -125,6 +191,7 @@
         <div class="calc-result" id="result-bmi"></div>
       </div>
       <div class="calc-panel" id="panel-interest">
+        <div class="usage-tip">💡 按单利计算，适用于定期存款等</div>
         <form class="calc-form" id="form-interest">
           <label>本金（元）</label>
           <input type="number" id="interest-principal" min="0">

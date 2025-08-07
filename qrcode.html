@@ -13,20 +13,33 @@
     .qr-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; margin-right: 10px; }
     .qr-btn:hover { background: #1769aa; }
     #qr-canvas { background: #fff; border-radius: 8px; margin-top: 10px; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .qr-result { text-align: center; margin-top: 20px; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>二维码生成器</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="3" width="5" height="5" rx="1" stroke="#2d8cf0" stroke-width="2"/>
+        <rect x="12" y="3" width="5" height="5" rx="1" stroke="#2d8cf0" stroke-width="2"/>
+        <rect x="3" y="12" width="5" height="5" rx="1" stroke="#2d8cf0" stroke-width="2"/>
+        <rect x="12" y="12" width="5" height="5" rx="1" stroke="#2d8cf0" stroke-width="2"/>
+      </svg>
+      <h1>二维码生成器</h1>
+    </div>
     <p>快速将文本、链接等内容生成二维码，便于分享和保存。</p>
     <div id="qrcode-app">
       <section class="qr-section">
+        <div class="usage-tip">📱 支持文本、链接、联系方式等，生成后可直接下载</div>
         <input type="text" id="qr-input" placeholder="输入文本或链接..." style="width:300px;">
         <button class="qr-btn" id="qr-btn">生成二维码</button>
         <a class="qr-btn" id="qr-download" style="display:none;" href="#">下载二维码</a>
-        <br>
-        <canvas id="qr-canvas" width="200" height="200"></canvas>
+        <div class="qr-result">
+          <canvas id="qr-canvas" width="200" height="200"></canvas>
+        </div>
       </section>
     </div>
   </main>

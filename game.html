@@ -14,19 +14,35 @@
     #fruit-area { width: 100%; max-width: 350px; height: 350px; background: #f0f4fa; border-radius: 12px; margin: 18px auto; position: relative; overflow: hidden; }
     .fruit { width: 40px; height: 40px; background: #ff7675; border-radius: 50%; position: absolute; left: 50%; top: 90%; box-shadow: 0 2px 8px #d63031; cursor: pointer; transition: background 0.2s; }
     .fruit:hover { background: #fdcb6e; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .game-score { text-align: center; font-size: 1.2em; font-weight: bold; margin: 10px 0; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>小游戏</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+        <circle cx="10" cy="10" r="3" fill="#2d8cf0"/>
+      </svg>
+      <h1>小游戏</h1>
+    </div>
     <p>轻松休闲小游戏，放松你的大脑，激发创造力。</p>
     <div id="game-app">
       <section class="game-section">
-        <h2>切西瓜</h2>
+        <div class="usage-tip">🍉 点击水果切掉，15秒计分，看看你能得多少分！</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <circle cx="10" cy="10" r="3" fill="#2d8cf0"/>
+          </svg>切西瓜
+        </h2>
         <button class="game-btn" id="start-fruit-btn">开始游戏</button>
+        <div class="game-score" id="game-score">得分：0</div>
         <div id="fruit-area"></div>
-        <p>点击水果切掉，15秒计分，看看你能得多少分！</p>
+        <p style="text-align:center;color:#888;">点击水果切掉，15秒后显示最终得分</p>
       </section>
       <!-- 2048/贪吃蛇/反应力测试结构预留，可后续补充 -->
     </div>

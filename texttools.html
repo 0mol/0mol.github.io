@@ -13,18 +13,36 @@
     .txt-btn:hover { background: #1769aa; }
     #txt-input { width: 100%; min-height: 120px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
     .txt-row { margin-bottom: 10px; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .section-icon { width: 20px; height: 20px; margin-right: 8px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>文本工具</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <rect x="4" y="4" width="12" height="12" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+        <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+        <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1>文本工具</h1>
+    </div>
     <p>多种文本处理工具，支持大小写转换、字数统计等实用功能。</p>
     <div id="texttools-app">
       <section class="txt-section">
+        <div class="usage-tip">📝 在下方输入框中粘贴或输入要处理的文本</div>
         <textarea id="txt-input" placeholder="请输入文本..."></textarea>
       </section>
       <section class="txt-section txt-row">
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="4" y="4" width="12" height="12" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>基础处理
+        </h2>
         <button class="txt-btn" id="txt-upper">转大写</button>
         <button class="txt-btn" id="txt-lower">转小写</button>
         <button class="txt-btn" id="txt-stat">字数统计</button>
@@ -33,6 +51,12 @@
         <button class="txt-btn" id="txt-format">JSON格式化</button>
       </section>
       <section class="txt-section txt-row">
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>正则替换
+        </h2>
         <label>正则表达式：</label>
         <input type="text" id="txt-regex-exp" placeholder="如 foo" style="width:120px;">
         <label>替换为：</label>

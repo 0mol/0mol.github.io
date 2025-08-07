@@ -15,16 +15,32 @@
     .task-list li { margin: 6px 0; }
     .task-list button { margin-left: 10px; }
     .stat-box { background: #f0f4fa; border-radius: 6px; padding: 10px 18px; display: inline-block; margin-right: 18px; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .section-icon { width: 20px; height: 20px; margin-right: 8px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .empty-tip { color: #888; font-style: italic; margin: 10px 0; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>番茄钟</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+        <path d="M10 5V10L13 13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1>番茄钟</h1>
+    </div>
     <p>高效时间管理，专注每一刻。25分钟专注+5分钟休息，助你提升效率。</p>
     <div id="pomodoro-app">
       <section class="pomodoro-section">
-        <h2>番茄计时</h2>
+        <div class="usage-tip">⏰ 专注25分钟，休息5分钟，循环往复，提高工作效率</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M10 5V10L13 13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>番茄计时
+        </h2>
         <label>模式：</label>
         <select id="pomodoro-mode">
           <option value="work">专注</option>
@@ -37,13 +53,27 @@
         <button class="pomodoro-btn" id="pomodoro-stop">停止</button>
       </section>
       <section class="pomodoro-section">
-        <h2>任务清单</h2>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="5" width="14" height="10" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>任务清单
+        </h2>
         <input type="text" id="task-input" placeholder="添加新任务..." style="width:200px;">
         <button class="pomodoro-btn" id="add-task-btn">添加</button>
-        <ul class="task-list" id="task-list"></ul>
+        <ul class="task-list" id="task-list">
+          <li class="empty-tip">暂无任务，添加一个开始吧！</li>
+        </ul>
       </section>
       <section class="pomodoro-section">
-        <h2>历史统计</h2>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 7H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 11H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>历史统计
+        </h2>
         <span class="stat-box">专注次数：<span id="stat-work">0</span></span>
         <span class="stat-box">休息次数：<span id="stat-break">0</span></span>
       </section>

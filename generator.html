@@ -14,48 +14,103 @@
     .gen-color-show { width: 120px; height: 40px; display: inline-block; border-radius: 6px; line-height: 40px; text-align: center; font-weight: bold; margin-left: 10px; }
     .gen-pwd-show { width: 180px; }
     .gen-emoji-show { font-size: 2em; margin-left: 10px; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .section-icon { width: 20px; height: 20px; margin-right: 8px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .result-box { background: #f0f4fa; border-radius: 6px; padding: 12px; margin-top: 10px; min-height: 20px; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>创意生成器</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+        <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1>创意生成器</h1>
+    </div>
     <p>随机颜色、密码、灵感等创意工具，激发你的无限可能。</p>
     <div id="generator-app">
       <section class="gen-section">
-        <h2>随机颜色</h2>
+        <div class="usage-tip">🎨 点击生成随机颜色，自动复制到剪贴板</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>随机颜色
+        </h2>
         <button class="gen-btn" id="gen-color-btn">生成颜色</button>
         <span class="gen-color-show" id="gen-color-show">#ffffff</span>
       </section>
       <section class="gen-section">
-        <h2>随机密码</h2>
+        <div class="usage-tip">🔐 生成安全密码，支持自定义长度</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="3" stroke="#2d8cf0" stroke-width="2"/>
+            <rect x="6" y="6" width="8" height="2" rx="1" fill="#2d8cf0"/>
+            <rect x="6" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+            <rect x="10" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+            <rect x="14" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
+          </svg>随机密码
+        </h2>
         <label>长度：</label>
         <input type="number" id="gen-pwd-len" value="12" min="4" max="32" style="width:60px;">
         <button class="gen-btn" id="gen-pwd-btn">生成密码</button>
         <input class="gen-pwd-show" id="gen-pwd-show" readonly>
       </section>
       <section class="gen-section">
-        <h2>灵感生成</h2>
+        <div class="usage-tip">💡 随机灵感，帮你突破创作瓶颈</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>灵感生成
+        </h2>
         <button class="gen-btn" id="gen-idea-btn">来点灵感</button>
-        <span id="gen-idea-show"></span>
+        <div class="result-box" id="gen-idea-show"></div>
       </section>
       <section class="gen-section">
-        <h2>昵称生成</h2>
+        <div class="usage-tip">👤 生成有趣昵称，适合游戏或社交平台</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="7" r="3" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M3 18C3 14 6 11 10 11S17 14 17 18" stroke="#2d8cf0" stroke-width="2"/>
+          </svg>昵称生成
+        </h2>
         <button class="gen-btn" id="gen-nick-btn">生成昵称</button>
-        <span id="gen-nick-show"></span>
+        <div class="result-box" id="gen-nick-show"></div>
       </section>
       <section class="gen-section">
-        <h2>Emoji组合</h2>
+        <div class="usage-tip">😊 生成emoji组合，为文字增添趣味</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <circle cx="7" cy="8" r="1" fill="#2d8cf0"/>
+            <circle cx="13" cy="8" r="1" fill="#2d8cf0"/>
+            <path d="M7 13C7 11 8 10 10 10S13 11 13 13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>Emoji组合
+        </h2>
         <button class="gen-btn" id="gen-emoji-btn">生成Emoji</button>
         <span class="gen-emoji-show" id="gen-emoji-show"></span>
       </section>
       <section class="gen-section">
-        <h2>随机数/抽签</h2>
+        <div class="usage-tip">🎲 随机数生成，可用于抽签、游戏等</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <circle cx="7" cy="7" r="1" fill="#2d8cf0"/>
+            <circle cx="13" cy="7" r="1" fill="#2d8cf0"/>
+            <circle cx="7" cy="13" r="1" fill="#2d8cf0"/>
+            <circle cx="13" cy="13" r="1" fill="#2d8cf0"/>
+            <circle cx="10" cy="10" r="1" fill="#2d8cf0"/>
+          </svg>随机数/抽签
+        </h2>
         <label>区间：</label>
         <input type="number" id="gen-rand-min" value="1" style="width:60px;"> -
         <input type="number" id="gen-rand-max" value="100" style="width:60px;">
         <button class="gen-btn" id="gen-rand-btn">生成</button>
-        <span id="gen-rand-show"></span>
+        <div class="result-box" id="gen-rand-show"></div>
       </section>
     </div>
   </main>

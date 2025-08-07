@@ -14,31 +14,70 @@
     .fc-list li { margin: 6px 0; }
     .fc-list button { margin-left: 10px; }
     .stat-box { background: #f0f4fa; border-radius: 6px; padding: 10px 18px; display: inline-block; margin-right: 18px; }
+    .page-title { display: flex; align-items: center; gap: 10px; }
+    .section-icon { width: 20px; height: 20px; margin-right: 8px; }
+    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .empty-tip { color: #888; font-style: italic; margin: 10px 0; }
+    .card-result { background: #f0f4fa; border-radius: 6px; padding: 12px; margin-top: 10px; min-height: 20px; }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <h1>记忆卡片</h1>
+    <div class="page-title">
+      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+        <rect x="3" y="5" width="14" height="10" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+        <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+        <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <h1>记忆卡片</h1>
+    </div>
     <p>自定义知识点，随时随地高效记忆，助你轻松学习。</p>
     <div id="flashcards-app">
       <section class="fc-section">
-        <h2>添加卡片</h2>
+        <div class="usage-tip">📝 添加知识点卡片，正面是问题，反面是答案</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="5" width="14" height="10" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>添加卡片
+        </h2>
         <input type="text" id="card-front" placeholder="正面内容" style="width:120px;">
         <input type="text" id="card-back" placeholder="反面内容" style="width:120px;">
         <button class="fc-btn" id="add-card-btn">添加</button>
       </section>
       <section class="fc-section">
-        <h2>卡片列表</h2>
-        <ul class="fc-list" id="card-list"></ul>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 7H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 11H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>卡片列表
+        </h2>
+        <ul class="fc-list" id="card-list">
+          <li class="empty-tip">暂无卡片，添加一个开始学习吧！</li>
+        </ul>
       </section>
       <section class="fc-section">
-        <h2>抽卡记忆</h2>
+        <div class="usage-tip">🎯 随机抽卡复习，点击卡片可标记完成状态</div>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>抽卡记忆
+        </h2>
         <button class="fc-btn" id="draw-card-btn">随机抽卡</button>
-        <span id="draw-card-show"></span>
+        <div class="card-result" id="draw-card-show"></div>
       </section>
       <section class="fc-section">
-        <h2>记忆统计</h2>
+        <h2>
+          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
+            <rect x="3" y="3" width="14" height="14" rx="2" stroke="#2d8cf0" stroke-width="2"/>
+            <path d="M7 7H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+            <path d="M7 11H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
+          </svg>记忆统计
+        </h2>
         <span class="stat-box">总卡片数：<span id="stat-total">0</span></span>
         <span class="stat-box">当前卡片复习次数：<span id="stat-review">0</span></span>
       </section>
