@@ -3,68 +3,710 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>文本工具 - 有趣实用工具箱</title>
+  <title>文本工具 - 专业文本处理工具</title>
+  <meta name="description" content="专业的文本处理工具，支持格式转换、编码转换、文本分析、正则表达式等多种功能">
   <link rel="stylesheet" href="css/style.css">
   <script defer src="js/nav.js"></script>
   <script defer src="js/texttools.js"></script>
   <style>
-    .txt-section { margin-bottom: 32px; }
-    .txt-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; margin-right: 10px; }
-    .txt-btn:hover { background: #1769aa; }
-    #txt-input { width: 100%; min-height: 120px; border-radius: 8px; border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; }
-    .txt-row { margin-bottom: 10px; }
-    .page-title { display: flex; align-items: center; gap: 10px; }
-    .section-icon { width: 20px; height: 20px; margin-right: 8px; }
-    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
+    .texttools-header {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 24px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      border-radius: 16px;
+      color: white;
+    }
+    .texttools-title {
+      font-size: 2em;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .texttools-subtitle {
+      opacity: 0.9;
+      font-size: 1.1em;
+    }
+    
+    .texttools-section { 
+      margin-bottom: 32px; 
+      background: var(--panel);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    
+    .texttools-grid {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      margin: 24px 0;
+    }
+    
+    .texttools-main {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .text-input-container {
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .text-input {
+      width: 100%;
+      min-height: 200px;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      padding: 16px;
+      margin-bottom: 16px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 1em;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      resize: vertical;
+      transition: all 0.2s;
+    }
+    .text-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,140,240,0.1);
+    }
+    
+    .text-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .text-btn { 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 8px; 
+      padding: 8px 16px; 
+      cursor: pointer; 
+      font-weight: 500;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9em;
+    }
+    .text-btn:hover { 
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(45,140,240,0.3);
+    }
+    .text-btn.secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .text-btn.secondary:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .text-btn.success {
+      background: var(--success);
+    }
+    .text-btn.success:hover {
+      background: var(--success-dark);
+    }
+    .text-btn.warning {
+      background: var(--warning);
+    }
+    .text-btn.warning:hover {
+      background: var(--warning-dark);
+    }
+    
+    .text-stats {
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 20px;
+      height: fit-content;
+    }
+    .stats-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .stat-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9em;
+    }
+    .stat-value {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .tools-tabs {
+      display: flex;
+      gap: 2px;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+    }
+    .tool-tab {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+      font-size: 0.9em;
+    }
+    .tool-tab.active {
+      background: var(--primary);
+      color: white;
+    }
+    
+    .tool-panel {
+      display: none;
+    }
+    .tool-panel.active {
+      display: block;
+    }
+    
+    .tool-group {
+      margin-bottom: 20px;
+    }
+    .tool-group h4 {
+      margin-bottom: 12px;
+      color: var(--primary);
+      font-size: 1em;
+    }
+    .tool-buttons {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    
+    .regex-panel {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .regex-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .regex-input {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.9em;
+      transition: all 0.2s;
+    }
+    .regex-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,140,240,0.1);
+    }
+    
+    .format-panel {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .format-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .format-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .format-option input {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--primary);
+    }
+    
+    .encoding-panel {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .encoding-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .encoding-select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      font-size: 0.9em;
+    }
+    
+    .analysis-panel {
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+    .analysis-results {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+    }
+    .analysis-item {
+      background: var(--panel);
+      border-radius: 6px;
+      padding: 12px;
+      text-align: center;
+    }
+    .analysis-number {
+      font-size: 1.5em;
+      font-weight: 700;
+      color: var(--primary);
+      display: block;
+    }
+    .analysis-label {
+      font-size: 0.8em;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+    
+    .history-section {
+      margin-top: 32px;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .history-list {
+      max-height: 300px;
+      overflow-y: auto;
+      background: var(--bg);
+      border-radius: 8px;
+      padding: 8px;
+    }
+    .history-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: var(--panel);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+    .history-content {
+      flex: 1;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 0.9em;
+      max-width: 300px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .history-meta {
+      display: flex;
+      gap: 12px;
+      font-size: 0.8em;
+      color: var(--text-secondary);
+    }
+    .history-actions {
+      display: flex;
+      gap: 8px;
+    }
+    
+    @media (max-width: 768px) {
+      .texttools-grid {
+        grid-template-columns: 1fr;
+      }
+      .text-controls {
+        flex-direction: column;
+      }
+      .regex-inputs {
+        grid-template-columns: 1fr;
+      }
+      .encoding-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
   </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
-    <div class="page-title">
-      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
-        <rect x="4" y="4" width="12" height="12" rx="2" stroke="#2d8cf0" stroke-width="2"/>
-        <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
-        <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <h1>文本工具</h1>
+    <div class="texttools-header">
+      <h1 class="texttools-title">📝 文本工具</h1>
+      <p class="texttools-subtitle">专业的文本处理工具，支持多种格式转换和分析功能</p>
     </div>
-    <p>多种文本处理工具，支持大小写转换、字数统计等实用功能。</p>
-    <div id="texttools-app">
-      <section class="txt-section">
-        <div class="usage-tip">📝 在下方输入框中粘贴或输入要处理的文本</div>
-        <textarea id="txt-input" placeholder="请输入文本..."></textarea>
-      </section>
-      <section class="txt-section txt-row">
-        <h2>
-          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="4" y="4" width="12" height="12" rx="2" stroke="#2d8cf0" stroke-width="2"/>
-            <path d="M7 8H13" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
-            <path d="M7 12H11" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
-          </svg>基础处理
-        </h2>
-        <button class="txt-btn" id="txt-upper">转大写</button>
-        <button class="txt-btn" id="txt-lower">转小写</button>
-        <button class="txt-btn" id="txt-stat">字数统计</button>
-        <span id="txt-stat-show"></span>
-        <button class="txt-btn" id="txt-dedup">去重/去空行</button>
-        <button class="txt-btn" id="txt-format">JSON格式化</button>
-      </section>
-      <section class="txt-section txt-row">
-        <h2>
-          <svg class="section-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="#2d8cf0" stroke-width="2"/>
-            <path d="M10 4V10L14 12" stroke="#2d8cf0" stroke-width="2" stroke-linecap="round"/>
-          </svg>正则替换
-        </h2>
-        <label>正则表达式：</label>
-        <input type="text" id="txt-regex-exp" placeholder="如 foo" style="width:120px;">
-        <label>替换为：</label>
-        <input type="text" id="txt-regex-rep" placeholder="bar" style="width:120px;">
-        <button class="txt-btn" id="txt-regex">批量替换</button>
-      </section>
+
+    <div class="texttools-section">
+      <div class="text-input-container">
+        <textarea class="text-input" id="text-input" placeholder="请输入要处理的文本..."></textarea>
+        <div class="text-controls">
+          <button class="text-btn secondary" id="clear-text">
+            <span>🗑️</span> 清空
+          </button>
+          <button class="text-btn secondary" id="copy-text">
+            <span>📋</span> 复制
+          </button>
+          <button class="text-btn secondary" id="paste-text">
+            <span>📄</span> 粘贴
+          </button>
+          <button class="text-btn secondary" id="load-file">
+            <span>📁</span> 加载文件
+          </button>
+          <input type="file" id="file-input" accept=".txt,.json,.xml,.html,.css,.js" style="display: none;">
+        </div>
+      </div>
+
+      <div class="texttools-grid">
+        <div class="texttools-main">
+          <div class="tools-tabs">
+            <button class="tool-tab active" data-tool="basic">基础处理</button>
+            <button class="tool-tab" data-tool="format">格式化</button>
+            <button class="tool-tab" data-tool="regex">正则表达式</button>
+            <button class="tool-tab" data-tool="encoding">编码转换</button>
+            <button class="tool-tab" data-tool="analysis">文本分析</button>
+          </div>
+
+          <!-- 基础处理 -->
+          <div class="tool-panel active" id="basic-panel">
+            <div class="tool-group">
+              <h4>大小写转换</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="to-uppercase">
+                  <span>🔤</span> 转大写
+                </button>
+                <button class="text-btn" id="to-lowercase">
+                  <span>🔤</span> 转小写
+                </button>
+                <button class="text-btn" id="to-titlecase">
+                  <span>🔤</span> 首字母大写
+                </button>
+                <button class="text-btn" id="to-camelcase">
+                  <span>🔤</span> 驼峰命名
+                </button>
+                <button class="text-btn" id="to-snakecase">
+                  <span>🔤</span> 下划线命名
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <h4>文本清理</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="remove-spaces">
+                  <span>🧹</span> 去除空格
+                </button>
+                <button class="text-btn" id="remove-duplicates">
+                  <span>🧹</span> 去除重复行
+                </button>
+                <button class="text-btn" id="remove-empty-lines">
+                  <span>🧹</span> 去除空行
+                </button>
+                <button class="text-btn" id="trim-lines">
+                  <span>✂️</span> 去除行首尾空格
+                </button>
+                <button class="text-btn" id="normalize-whitespace">
+                  <span>🧹</span> 规范化空白
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <h4>文本转换</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="reverse-text">
+                  <span>🔄</span> 反转文本
+                </button>
+                <button class="text-btn" id="sort-lines">
+                  <span>📊</span> 排序行
+                </button>
+                <button class="text-btn" id="reverse-lines">
+                  <span>🔄</span> 反转行
+                </button>
+                <button class="text-btn" id="add-line-numbers">
+                  <span>🔢</span> 添加行号
+                </button>
+                <button class="text-btn" id="remove-line-numbers">
+                  <span>🔢</span> 移除行号
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 格式化 -->
+          <div class="tool-panel" id="format-panel">
+            <div class="format-panel">
+              <h4>JSON格式化</h4>
+              <div class="format-options">
+                <label class="format-option">
+                  <input type="checkbox" id="json-pretty" checked>
+                  <span>美化格式</span>
+                </label>
+                <label class="format-option">
+                  <input type="checkbox" id="json-compact">
+                  <span>压缩格式</span>
+                </label>
+                <label class="format-option">
+                  <input type="checkbox" id="json-validate">
+                  <span>验证JSON</span>
+                </label>
+              </div>
+              <div class="tool-buttons">
+                <button class="text-btn success" id="format-json">
+                  <span>📄</span> 格式化JSON
+                </button>
+                <button class="text-btn" id="minify-json">
+                  <span>📄</span> 压缩JSON
+                </button>
+              </div>
+            </div>
+
+            <div class="format-panel">
+              <h4>XML格式化</h4>
+              <div class="format-options">
+                <label class="format-option">
+                  <input type="checkbox" id="xml-pretty" checked>
+                  <span>美化格式</span>
+                </label>
+                <label class="format-option">
+                  <input type="checkbox" id="xml-compact">
+                  <span>压缩格式</span>
+                </label>
+                <label class="format-option">
+                  <input type="checkbox" id="xml-validate">
+                  <span>验证XML</span>
+                </label>
+              </div>
+              <div class="tool-buttons">
+                <button class="text-btn success" id="format-xml">
+                  <span>📄</span> 格式化XML
+                </button>
+                <button class="text-btn" id="minify-xml">
+                  <span>📄</span> 压缩XML
+                </button>
+              </div>
+            </div>
+
+            <div class="format-panel">
+              <h4>其他格式</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="format-css">
+                  <span>🎨</span> 格式化CSS
+                </button>
+                <button class="text-btn" id="format-html">
+                  <span>🌐</span> 格式化HTML
+                </button>
+                <button class="text-btn" id="format-sql">
+                  <span>🗄️</span> 格式化SQL
+                </button>
+                <button class="text-btn" id="format-markdown">
+                  <span>📝</span> 格式化Markdown
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 正则表达式 -->
+          <div class="tool-panel" id="regex-panel">
+            <div class="regex-panel">
+              <div class="regex-inputs">
+                <input type="text" class="regex-input" id="regex-pattern" placeholder="正则表达式">
+                <input type="text" class="regex-input" id="regex-replacement" placeholder="替换内容">
+              </div>
+              <div class="tool-buttons">
+                <button class="text-btn success" id="regex-replace">
+                  <span>🔄</span> 替换
+                </button>
+                <button class="text-btn" id="regex-match">
+                  <span>🔍</span> 查找匹配
+                </button>
+                <button class="text-btn" id="regex-extract">
+                  <span>📤</span> 提取匹配
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <h4>常用正则</h4>
+              <div class="tool-buttons">
+                <button class="text-btn secondary" data-regex="\s+">去除多余空格</button>
+                <button class="text-btn secondary" data-regex="[^\w\s]">去除标点符号</button>
+                <button class="text-btn secondary" data-regex="\d+">提取数字</button>
+                <button class="text-btn secondary" data-regex="[a-zA-Z]+">提取字母</button>
+                <button class="text-btn secondary" data-regex="https?://[^\s]+">提取链接</button>
+                <button class="text-btn secondary" data-regex="[\w.-]+@[\w.-]+\.\w+">提取邮箱</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 编码转换 -->
+          <div class="tool-panel" id="encoding-panel">
+            <div class="encoding-panel">
+              <div class="encoding-controls">
+                <select class="encoding-select" id="source-encoding">
+                  <option value="UTF-8">UTF-8</option>
+                  <option value="GBK">GBK</option>
+                  <option value="GB2312">GB2312</option>
+                  <option value="ISO-8859-1">ISO-8859-1</option>
+                  <option value="ASCII">ASCII</option>
+                </select>
+                <span>→</span>
+                <select class="encoding-select" id="target-encoding">
+                  <option value="UTF-8">UTF-8</option>
+                  <option value="GBK">GBK</option>
+                  <option value="GB2312">GB2312</option>
+                  <option value="ISO-8859-1">ISO-8859-1</option>
+                  <option value="ASCII">ASCII</option>
+                </select>
+                <button class="text-btn success" id="convert-encoding">
+                  <span>🔄</span> 转换编码
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <h4>编码工具</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="encode-base64">
+                  <span>🔐</span> Base64编码
+                </button>
+                <button class="text-btn" id="decode-base64">
+                  <span>🔓</span> Base64解码
+                </button>
+                <button class="text-btn" id="encode-url">
+                  <span>🔗</span> URL编码
+                </button>
+                <button class="text-btn" id="decode-url">
+                  <span>🔗</span> URL解码
+                </button>
+                <button class="text-btn" id="encode-html">
+                  <span>🌐</span> HTML编码
+                </button>
+                <button class="text-btn" id="decode-html">
+                  <span>🌐</span> HTML解码
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 文本分析 -->
+          <div class="tool-panel" id="analysis-panel">
+            <div class="analysis-panel">
+              <h4>文本统计</h4>
+              <div class="analysis-results" id="analysis-results">
+                <!-- 分析结果将在这里显示 -->
+              </div>
+              <div class="tool-buttons">
+                <button class="text-btn success" id="analyze-text">
+                  <span>📊</span> 分析文本
+                </button>
+                <button class="text-btn" id="export-analysis">
+                  <span>📤</span> 导出分析
+                </button>
+              </div>
+            </div>
+
+            <div class="tool-group">
+              <h4>高级分析</h4>
+              <div class="tool-buttons">
+                <button class="text-btn" id="find-keywords">
+                  <span>🔍</span> 关键词提取
+                </button>
+                <button class="text-btn" id="sentiment-analysis">
+                  <span>😊</span> 情感分析
+                </button>
+                <button class="text-btn" id="language-detect">
+                  <span>🌍</span> 语言检测
+                </button>
+                <button class="text-btn" id="text-summary">
+                  <span>📝</span> 文本摘要
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="text-stats">
+          <div class="stats-header">
+            <span>📊</span> 文本统计
+          </div>
+          <div id="text-stats">
+            <div class="stat-item">
+              <span class="stat-label">字符数</span>
+              <span class="stat-value" id="char-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">字符数(不含空格)</span>
+              <span class="stat-value" id="char-count-no-space">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">单词数</span>
+              <span class="stat-value" id="word-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">行数</span>
+              <span class="stat-value" id="line-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">段落数</span>
+              <span class="stat-value" id="paragraph-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">句子数</span>
+              <span class="stat-value" id="sentence-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">字节数</span>
+              <span class="stat-value" id="byte-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">预估阅读时间</span>
+              <span class="stat-value" id="reading-time">0分钟</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 处理历史 -->
+    <div class="texttools-section history-section">
+      <div class="history-header">
+        <h3>📚 处理历史</h3>
+        <span id="history-count">共 0 条记录</span>
+      </div>
+      <div class="history-list" id="text-history">
+        <div class="empty-tip">暂无历史记录</div>
+      </div>
     </div>
   </main>
-  <footer>© 2024 有趣实用工具箱</footer>
 </body>
 </html> 
