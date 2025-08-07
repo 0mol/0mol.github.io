@@ -4,207 +4,890 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>智能计算器 - 有趣实用工具箱</title>
+  <meta name="description" content="功能强大的智能计算器，支持基础计算、科学计算、单位转换、金融计算等多种功能">
   <link rel="stylesheet" href="css/style.css">
   <script defer src="js/nav.js"></script>
-  <style>
-    .calc-tabs { display: flex; gap: 10px; margin-bottom: 18px; }
-    .calc-tab { padding: 8px 18px; border-radius: 6px 6px 0 0; background: #f0f4fa; cursor: pointer; border: none; font-size: 1em; }
-    .calc-tab.active { background: #2d8cf0; color: #fff; }
-    .calc-panel { display: none; }
-    .calc-panel.active { display: block; }
-    .calc-form { margin: 18px 0; }
-    .calc-form label { display: block; margin: 8px 0 4px; }
-    .calc-form input, .calc-form select { width: 100%; padding: 6px; border-radius: 4px; border: 1px solid #ddd; margin-bottom: 10px; }
-    .calc-result { background: #f0f4fa; border-radius: 6px; padding: 12px; margin-top: 10px; }
-    .calc-btn { background: #2d8cf0; color: #fff; border: none; border-radius: 4px; padding: 8px 18px; cursor: pointer; }
-    .calc-btn:hover { background: #1769aa; }
-    .page-title { display: flex; align-items: center; gap: 10px; }
-    .tab-icon { width: 16px; height: 16px; margin-right: 6px; }
-    .usage-tip { background: #e6f0ff; border-radius: 6px; padding: 10px; margin: 10px 0; font-size: 0.9em; color: #2d8cf0; }
-  </style>
   <script defer src="js/calculator.js"></script>
+  <style>
+    .calc-container { max-width: 1200px; margin: 0 auto; }
+    .calc-tabs { 
+      display: flex; 
+      gap: 2px; 
+      margin-bottom: 24px; 
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 4px;
+      overflow-x: auto;
+      flex-wrap: wrap;
+    }
+    .calc-tab { 
+      padding: 12px 20px; 
+      border-radius: 8px; 
+      background: transparent; 
+      cursor: pointer; 
+      border: none; 
+      font-size: 0.9em;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calc-tab.active { 
+      background: var(--primary); 
+      color: #fff; 
+      box-shadow: 0 2px 8px rgba(45,140,240,0.3);
+    }
+    .calc-tab:hover:not(.active) {
+      background: rgba(45,140,240,0.1);
+    }
+    .calc-panel { 
+      display: none; 
+      animation: fadeIn 0.3s ease;
+    }
+    .calc-panel.active { 
+      display: block; 
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .calc-form { 
+      margin: 24px 0; 
+      display: grid;
+      gap: 16px;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-group label {
+      font-weight: 500;
+      color: var(--text);
+      font-size: 0.9em;
+    }
+    .form-group input, .form-group select {
+      padding: 12px 16px;
+      border-radius: 8px;
+      border: 2px solid transparent;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 1em;
+      transition: all 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(45,140,240,0.1);
+    }
+    .calc-result { 
+      background: var(--panel);
+      border-radius: 12px; 
+      padding: 20px; 
+      margin-top: 20px;
+      border: 2px solid var(--primary);
+      box-shadow: 0 4px 16px rgba(45,140,240,0.1);
+    }
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    .result-content {
+      display: grid;
+      gap: 12px;
+    }
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--bg);
+      border-radius: 8px;
+      border-left: 4px solid var(--primary);
+    }
+    .result-label {
+      font-weight: 500;
+      color: var(--text);
+    }
+    .result-value {
+      font-weight: 600;
+      color: var(--primary);
+      font-family: 'Courier New', monospace;
+    }
+    .calc-btn { 
+      background: var(--primary); 
+      color: #fff; 
+      border: none; 
+      border-radius: 8px; 
+      padding: 12px 24px; 
+      cursor: pointer;
+      font-size: 1em;
+      font-weight: 500;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .calc-btn:hover { 
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(45,140,240,0.3);
+    }
+    .calc-btn:active {
+      transform: translateY(0);
+    }
+    .calc-btn.secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .calc-btn.secondary:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    .page-title { display: flex; align-items: center; gap: 12px; }
+    .tab-icon { width: 18px; height: 18px; margin-right: 8px; }
+    .usage-tip { 
+      background: linear-gradient(135deg, rgba(45,140,240,0.1), rgba(45,140,240,0.05));
+      border-radius: 12px; 
+      padding: 16px; 
+      margin: 16px 0; 
+      font-size: 0.9em; 
+      color: var(--primary);
+      border-left: 4px solid var(--primary);
+    }
+    
+    /* 科学计算器样式 */
+    .scientific-calculator {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 24px;
+      margin: 24px 0;
+    }
+    .calc-display {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 2px solid var(--border);
+    }
+    .calc-expression {
+      font-size: 1.2em;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      min-height: 1.5em;
+      word-wrap: break-word;
+    }
+    .calc-result-display {
+      font-size: 2em;
+      font-weight: 700;
+      color: var(--primary);
+      font-family: 'Courier New', monospace;
+      text-align: right;
+      min-height: 1.2em;
+    }
+    .calculator-keypad {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .keypad-btn {
+      padding: 16px;
+      border: none;
+      border-radius: 8px;
+      background: var(--panel);
+      color: var(--text);
+      font-size: 1.2em;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+    .keypad-btn:hover {
+      background: var(--primary);
+      color: #fff;
+      transform: translateY(-1px);
+    }
+    .keypad-btn.operator {
+      background: var(--warning);
+      color: #fff;
+    }
+    .keypad-btn.equals {
+      background: var(--success);
+      color: #fff;
+      grid-column: span 2;
+    }
+    .keypad-btn.clear {
+      background: var(--error);
+      color: #fff;
+    }
+    .keypad-btn.function {
+      background: var(--info);
+      color: #fff;
+      font-size: 1em;
+    }
+    .scientific-functions {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 20px;
+      height: fit-content;
+    }
+    .function-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    .function-btn {
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .function-btn:hover {
+      background: var(--primary);
+      color: #fff;
+    }
+    
+    /* 单位转换器样式 */
+    .converter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+    .converter-card {
+      background: var(--panel);
+      border-radius: 12px;
+      padding: 20px;
+      border: 2px solid transparent;
+      transition: all 0.3s;
+    }
+    .converter-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+    .converter-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    /* 金融计算器样式 */
+    .financial-tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 24px;
+      background: var(--bg);
+      border-radius: 12px;
+      padding: 4px;
+      overflow-x: auto;
+    }
+    .financial-tab {
+      padding: 12px 20px;
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9em;
+      font-weight: 500;
+      color: var(--text);
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .financial-tab.active {
+      background: var(--primary);
+      color: #fff;
+    }
+    
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      .scientific-calculator {
+        grid-template-columns: 1fr;
+      }
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+      .calculator-keypad {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .keypad-btn.equals {
+        grid-column: span 3;
+      }
+    }
+  </style>
 </head>
 <body>
   <div id="nav-placeholder"></div>
   <main class="container">
     <div class="page-title">
-      <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
-        <rect x="3" y="3" width="14" height="14" rx="3" stroke="#2d8cf0" stroke-width="2"/>
-        <rect x="6" y="6" width="8" height="2" rx="1" fill="#2d8cf0"/>
-        <rect x="6" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
-        <rect x="10" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
-        <rect x="14" y="10" width="2" height="2" rx="1" fill="#2d8cf0"/>
-      </svg>
-      <h1>智能计算器</h1>
+      <h1>🧮 智能计算器</h1>
     </div>
-    <p>支持基础、科学、房贷、五险一金、纳税、单位换算等多种常用计算，满足你的日常与学习需求。</p>
-    <div id="calculator-app">
+    
+    <div class="usage-tip">
+      💡 <strong>使用提示：</strong> 选择不同的计算模式，从基础计算到高级金融计算，满足各种计算需求
+    </div>
+
+    <div class="calc-container">
       <div class="calc-tabs">
         <button class="calc-tab active" data-tab="basic">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="3" width="14" height="14" rx="3" stroke="currentColor" stroke-width="2"/>
-            <rect x="6" y="6" width="8" height="2" rx="1" fill="currentColor"/>
-            <rect x="6" y="10" width="2" height="2" rx="1" fill="currentColor"/>
-            <rect x="10" y="10" width="2" height="2" rx="1" fill="currentColor"/>
-            <rect x="14" y="10" width="2" height="2" rx="1" fill="currentColor"/>
-          </svg>基础计算
+          <span>🔢</span> 基础计算
         </button>
-        <button class="calc-tab" data-tab="science">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M10 4V10L14 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>科学计算
+        <button class="calc-tab" data-tab="scientific">
+          <span>⚡</span> 科学计算
         </button>
-        <button class="calc-tab" data-tab="mortgage">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="5" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M7 8H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M7 12H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>房贷计算
+        <button class="calc-tab" data-tab="converter">
+          <span>🔄</span> 单位转换
         </button>
-        <button class="calc-tab" data-tab="insurance">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M10 6V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M6 10H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>五险一金
+        <button class="calc-tab" data-tab="financial">
+          <span>💰</span> 金融计算
         </button>
-        <button class="calc-tab" data-tab="tax">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
-            <path d="M7 7H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M7 11H11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>个人所得税
+        <button class="calc-tab" data-tab="percentage">
+          <span>📊</span> 百分比计算
         </button>
-        <button class="calc-tab" data-tab="unit">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <path d="M10 2L3 8H17L10 2Z" stroke="currentColor" stroke-width="2"/>
-            <rect x="3" y="8" width="14" height="9" rx="2" stroke="currentColor" stroke-width="2"/>
-          </svg>单位换算
-        </button>
-        <button class="calc-tab" data-tab="bmi">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M10 6V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            <path d="M6 10H14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>BMI/健康
-        </button>
-        <button class="calc-tab" data-tab="interest">
-          <svg class="tab-icon" viewBox="0 0 20 20" fill="none">
-            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="2"/>
-            <path d="M10 4V10L14 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>利息计算
+        <button class="calc-tab" data-tab="time">
+          <span>⏰</span> 时间计算
         </button>
       </div>
-      <div class="calc-panel active" id="panel-basic">
-        <div class="usage-tip">💡 支持基础四则运算，如：2+3*4、(1+2)*3</div>
-        <form class="calc-form" id="form-basic">
-          <label>表达式</label>
-          <input type="text" id="basic-exp" placeholder="如 2+3*4">
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-basic"></div>
+
+      <!-- 基础计算器 -->
+      <div class="calc-panel active" id="basic">
+        <div class="scientific-calculator">
+          <div>
+            <div class="calc-display">
+              <div class="calc-expression" id="expression">0</div>
+              <div class="calc-result-display" id="result">0</div>
+            </div>
+            <div class="calculator-keypad">
+              <button class="keypad-btn clear" onclick="clearCalc()">C</button>
+              <button class="keypad-btn function" onclick="deleteLast()">⌫</button>
+              <button class="keypad-btn function" onclick="addToExpression('%')">%</button>
+              <button class="keypad-btn operator" onclick="addToExpression('/')">÷</button>
+              
+              <button class="keypad-btn" onclick="addToExpression('7')">7</button>
+              <button class="keypad-btn" onclick="addToExpression('8')">8</button>
+              <button class="keypad-btn" onclick="addToExpression('9')">9</button>
+              <button class="keypad-btn operator" onclick="addToExpression('*')">×</button>
+              
+              <button class="keypad-btn" onclick="addToExpression('4')">4</button>
+              <button class="keypad-btn" onclick="addToExpression('5')">5</button>
+              <button class="keypad-btn" onclick="addToExpression('6')">6</button>
+              <button class="keypad-btn operator" onclick="addToExpression('-')">−</button>
+              
+              <button class="keypad-btn" onclick="addToExpression('1')">1</button>
+              <button class="keypad-btn" onclick="addToExpression('2')">2</button>
+              <button class="keypad-btn" onclick="addToExpression('3')">3</button>
+              <button class="keypad-btn operator" onclick="addToExpression('+')">+</button>
+              
+              <button class="keypad-btn" onclick="addToExpression('0')">0</button>
+              <button class="keypad-btn" onclick="addToExpression('.')">.</button>
+              <button class="keypad-btn equals" onclick="calculate()">=</button>
+            </div>
+          </div>
+          <div class="scientific-functions">
+            <h3>快速计算</h3>
+            <div class="function-grid">
+              <button class="function-btn" onclick="quickCalculate('sqrt')">√ 平方根</button>
+              <button class="function-btn" onclick="quickCalculate('square')">x² 平方</button>
+              <button class="function-btn" onclick="quickCalculate('reciprocal')">1/x 倒数</button>
+              <button class="function-btn" onclick="quickCalculate('percent')">% 百分比</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="calc-panel" id="panel-science">
-        <div class="usage-tip">💡 支持三角函数、对数、指数等，如：sin(30)+log(10)、2^3</div>
-        <form class="calc-form" id="form-science">
-          <label>表达式（支持 sin, cos, log, ^ 等）</label>
-          <input type="text" id="science-exp" placeholder="如 sin(30)+log(10)">
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-science"></div>
+
+      <!-- 科学计算器 -->
+      <div class="calc-panel" id="scientific">
+        <div class="scientific-calculator">
+          <div>
+            <div class="calc-display">
+              <div class="calc-expression" id="sci-expression">0</div>
+              <div class="calc-result-display" id="sci-result">0</div>
+            </div>
+            <div class="calculator-keypad">
+              <button class="keypad-btn clear" onclick="clearScientific()">C</button>
+              <button class="keypad-btn function" onclick="scientificFunction('sin')">sin</button>
+              <button class="keypad-btn function" onclick="scientificFunction('cos')">cos</button>
+              <button class="keypad-btn function" onclick="scientificFunction('tan')">tan</button>
+              
+              <button class="keypad-btn" onclick="addToScientific('7')">7</button>
+              <button class="keypad-btn" onclick="addToScientific('8')">8</button>
+              <button class="keypad-btn" onclick="addToScientific('9')">9</button>
+              <button class="keypad-btn operator" onclick="addToScientific('/')">÷</button>
+              
+              <button class="keypad-btn" onclick="addToScientific('4')">4</button>
+              <button class="keypad-btn" onclick="addToScientific('5')">5</button>
+              <button class="keypad-btn" onclick="addToScientific('6')">6</button>
+              <button class="keypad-btn operator" onclick="addToScientific('*')">×</button>
+              
+              <button class="keypad-btn" onclick="addToScientific('1')">1</button>
+              <button class="keypad-btn" onclick="addToScientific('2')">2</button>
+              <button class="keypad-btn" onclick="addToScientific('3')">3</button>
+              <button class="keypad-btn operator" onclick="addToScientific('-')">−</button>
+              
+              <button class="keypad-btn" onclick="addToScientific('0')">0</button>
+              <button class="keypad-btn" onclick="addToScientific('.')">.</button>
+              <button class="keypad-btn equals" onclick="calculateScientific()">=</button>
+              <button class="keypad-btn operator" onclick="addToScientific('+')">+</button>
+            </div>
+          </div>
+          <div class="scientific-functions">
+            <h3>科学函数</h3>
+            <div class="function-grid">
+              <button class="function-btn" onclick="scientificFunction('log')">log</button>
+              <button class="function-btn" onclick="scientificFunction('ln')">ln</button>
+              <button class="function-btn" onclick="scientificFunction('exp')">e^x</button>
+              <button class="function-btn" onclick="scientificFunction('pow')">x^y</button>
+              <button class="function-btn" onclick="scientificFunction('sqrt')">√x</button>
+              <button class="function-btn" onclick="scientificFunction('cbrt')">∛x</button>
+              <button class="function-btn" onclick="scientificFunction('factorial')">x!</button>
+              <button class="function-btn" onclick="scientificFunction('abs')">|x|</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="calc-panel" id="panel-mortgage">
-        <div class="usage-tip">💡 支持等额本息和等额本金两种还款方式</div>
-        <form class="calc-form" id="form-mortgage">
-          <label>贷款总额（万元）</label>
-          <input type="number" id="mortgage-total" min="1" step="0.01">
-          <label>年利率（%）</label>
-          <input type="number" id="mortgage-rate" min="0" step="0.01" value="4.2">
-          <label>贷款年限</label>
-          <input type="number" id="mortgage-years" min="1" max="40" value="30">
-          <label>还款方式</label>
-          <select id="mortgage-type">
-            <option value="equal">等额本息</option>
-            <option value="principal">等额本金</option>
-          </select>
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-mortgage"></div>
+
+      <!-- 单位转换器 -->
+      <div class="calc-panel" id="converter">
+        <div class="converter-grid">
+          <div class="converter-card">
+            <div class="converter-header">
+              <span>📏</span> 长度转换
+            </div>
+            <div class="calc-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>从</label>
+                  <select id="length-from">
+                    <option value="m">米 (m)</option>
+                    <option value="km">千米 (km)</option>
+                    <option value="cm">厘米 (cm)</option>
+                    <option value="mm">毫米 (mm)</option>
+                    <option value="in">英寸 (in)</option>
+                    <option value="ft">英尺 (ft)</option>
+                    <option value="yd">码 (yd)</option>
+                    <option value="mi">英里 (mi)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>到</label>
+                  <select id="length-to">
+                    <option value="m">米 (m)</option>
+                    <option value="km">千米 (km)</option>
+                    <option value="cm">厘米 (cm)</option>
+                    <option value="mm">毫米 (mm)</option>
+                    <option value="in">英寸 (in)</option>
+                    <option value="ft">英尺 (ft)</option>
+                    <option value="yd">码 (yd)</option>
+                    <option value="mi">英里 (mi)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>数值</label>
+                <input type="number" id="length-value" placeholder="输入数值" oninput="convertLength()">
+              </div>
+              <div class="calc-result" id="length-result" style="display: none;">
+                <div class="result-header">
+                  <span>📏</span> 转换结果
+                </div>
+                <div class="result-content" id="length-result-content"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="converter-card">
+            <div class="converter-header">
+              <span>⚖️</span> 重量转换
+            </div>
+            <div class="calc-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>从</label>
+                  <select id="weight-from">
+                    <option value="kg">千克 (kg)</option>
+                    <option value="g">克 (g)</option>
+                    <option value="mg">毫克 (mg)</option>
+                    <option value="lb">磅 (lb)</option>
+                    <option value="oz">盎司 (oz)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>到</label>
+                  <select id="weight-to">
+                    <option value="kg">千克 (kg)</option>
+                    <option value="g">克 (g)</option>
+                    <option value="mg">毫克 (mg)</option>
+                    <option value="lb">磅 (lb)</option>
+                    <option value="oz">盎司 (oz)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>数值</label>
+                <input type="number" id="weight-value" placeholder="输入数值" oninput="convertWeight()">
+              </div>
+              <div class="calc-result" id="weight-result" style="display: none;">
+                <div class="result-header">
+                  <span>⚖️</span> 转换结果
+                </div>
+                <div class="result-content" id="weight-result-content"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="converter-card">
+            <div class="converter-header">
+              <span>🌡️</span> 温度转换
+            </div>
+            <div class="calc-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>从</label>
+                  <select id="temp-from">
+                    <option value="c">摄氏度 (°C)</option>
+                    <option value="f">华氏度 (°F)</option>
+                    <option value="k">开尔文 (K)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>到</label>
+                  <select id="temp-to">
+                    <option value="c">摄氏度 (°C)</option>
+                    <option value="f">华氏度 (°F)</option>
+                    <option value="k">开尔文 (K)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>数值</label>
+                <input type="number" id="temp-value" placeholder="输入数值" oninput="convertTemperature()">
+              </div>
+              <div class="calc-result" id="temp-result" style="display: none;">
+                <div class="result-header">
+                  <span>🌡️</span> 转换结果
+                </div>
+                <div class="result-content" id="temp-result-content"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="converter-card">
+            <div class="converter-header">
+              <span>💰</span> 货币转换
+            </div>
+            <div class="calc-form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label>从</label>
+                  <select id="currency-from">
+                    <option value="CNY">人民币 (CNY)</option>
+                    <option value="USD">美元 (USD)</option>
+                    <option value="EUR">欧元 (EUR)</option>
+                    <option value="JPY">日元 (JPY)</option>
+                    <option value="GBP">英镑 (GBP)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>到</label>
+                  <select id="currency-to">
+                    <option value="CNY">人民币 (CNY)</option>
+                    <option value="USD">美元 (USD)</option>
+                    <option value="EUR">欧元 (EUR)</option>
+                    <option value="JPY">日元 (JPY)</option>
+                    <option value="GBP">英镑 (GBP)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label>数值</label>
+                <input type="number" id="currency-value" placeholder="输入数值" oninput="convertCurrency()">
+              </div>
+              <div class="calc-result" id="currency-result" style="display: none;">
+                <div class="result-header">
+                  <span>💰</span> 转换结果
+                </div>
+                <div class="result-content" id="currency-result-content"></div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="calc-panel" id="panel-insurance">
-        <div class="usage-tip">💡 可根据当地政策调整社保和公积金比例</div>
-        <form class="calc-form" id="form-insurance">
-          <label>工资基数（元）</label>
-          <input type="number" id="insurance-base" min="0">
-          <label>社保比例（%）</label>
-          <input type="number" id="insurance-sb" min="0" step="0.01" value="10.5">
-          <label>公积金比例（%）</label>
-          <input type="number" id="insurance-gjj" min="0" step="0.01" value="12">
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-insurance"></div>
+
+      <!-- 金融计算器 -->
+      <div class="calc-panel" id="financial">
+        <div class="financial-tabs">
+          <button class="financial-tab active" data-financial="loan">房贷计算</button>
+          <button class="financial-tab" data-financial="investment">投资计算</button>
+          <button class="financial-tab" data-financial="compound">复利计算</button>
+        </div>
+
+        <div class="financial-panel active" id="loan">
+          <div class="calc-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>贷款金额 (万元)</label>
+                <input type="number" id="loan-amount" placeholder="100" oninput="calculateLoan()">
+              </div>
+              <div class="form-group">
+                <label>贷款年限</label>
+                <select id="loan-years" onchange="calculateLoan()">
+                  <option value="30">30年</option>
+                  <option value="25">25年</option>
+                  <option value="20">20年</option>
+                  <option value="15">15年</option>
+                  <option value="10">10年</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>年利率 (%)</label>
+                <input type="number" id="loan-rate" placeholder="4.9" step="0.1" oninput="calculateLoan()">
+              </div>
+              <div class="form-group">
+                <label>还款方式</label>
+                <select id="loan-type" onchange="calculateLoan()">
+                  <option value="equal">等额本息</option>
+                  <option value="principal">等额本金</option>
+                </select>
+              </div>
+            </div>
+            <div class="calc-result" id="loan-result" style="display: none;">
+              <div class="result-header">
+                <span>🏠</span> 房贷计算结果
+              </div>
+              <div class="result-content" id="loan-result-content"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="financial-panel" id="investment">
+          <div class="calc-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>初始投资 (万元)</label>
+                <input type="number" id="invest-amount" placeholder="10" oninput="calculateInvestment()">
+              </div>
+              <div class="form-group">
+                <label>年收益率 (%)</label>
+                <input type="number" id="invest-rate" placeholder="8" step="0.1" oninput="calculateInvestment()">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>投资年限</label>
+                <input type="number" id="invest-years" placeholder="10" oninput="calculateInvestment()">
+              </div>
+              <div class="form-group">
+                <label>每月追加 (万元)</label>
+                <input type="number" id="invest-monthly" placeholder="0.5" step="0.1" oninput="calculateInvestment()">
+              </div>
+            </div>
+            <div class="calc-result" id="investment-result" style="display: none;">
+              <div class="result-header">
+                <span>📈</span> 投资计算结果
+              </div>
+              <div class="result-content" id="investment-result-content"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="financial-panel" id="compound">
+          <div class="calc-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>本金 (万元)</label>
+                <input type="number" id="compound-principal" placeholder="10" oninput="calculateCompound()">
+              </div>
+              <div class="form-group">
+                <label>年利率 (%)</label>
+                <input type="number" id="compound-rate" placeholder="5" step="0.1" oninput="calculateCompound()">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>投资年限</label>
+                <input type="number" id="compound-years" placeholder="10" oninput="calculateCompound()">
+              </div>
+              <div class="form-group">
+                <label>复利频率</label>
+                <select id="compound-frequency" onchange="calculateCompound()">
+                  <option value="1">年复利</option>
+                  <option value="2">半年复利</option>
+                  <option value="4">季度复利</option>
+                  <option value="12">月复利</option>
+                  <option value="365">日复利</option>
+                </select>
+              </div>
+            </div>
+            <div class="calc-result" id="compound-result" style="display: none;">
+              <div class="result-header">
+                <span>💰</span> 复利计算结果
+              </div>
+              <div class="result-content" id="compound-result-content"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="calc-panel" id="panel-tax">
-        <div class="usage-tip">💡 按最新个税政策计算，支持专项附加扣除</div>
-        <form class="calc-form" id="form-tax">
-          <label>税前月薪（元）</label>
-          <input type="number" id="tax-salary" min="0">
-          <label>五险一金（月，元）</label>
-          <input type="number" id="tax-insurance" min="0">
-          <label>专项附加扣除（月，元）</label>
-          <input type="number" id="tax-deduct" min="0" value="0">
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-tax"></div>
+
+      <!-- 百分比计算器 -->
+      <div class="calc-panel" id="percentage">
+        <div class="calc-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>计算类型</label>
+              <select id="percentage-type" onchange="updatePercentageForm()">
+                <option value="basic">基础百分比</option>
+                <option value="increase">增长百分比</option>
+                <option value="discount">折扣计算</option>
+                <option value="ratio">比例计算</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="percentage-basic" class="percentage-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>数值</label>
+                <input type="number" id="percent-value" placeholder="100" oninput="calculatePercentage()">
+              </div>
+              <div class="form-group">
+                <label>百分比 (%)</label>
+                <input type="number" id="percent-rate" placeholder="15" oninput="calculatePercentage()">
+              </div>
+            </div>
+          </div>
+
+          <div id="percentage-increase" class="percentage-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label>原始值</label>
+                <input type="number" id="increase-original" placeholder="100" oninput="calculateIncrease()">
+              </div>
+              <div class="form-group">
+                <label>新值</label>
+                <input type="number" id="increase-new" placeholder="120" oninput="calculateIncrease()">
+              </div>
+            </div>
+          </div>
+
+          <div id="percentage-discount" class="percentage-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label>原价</label>
+                <input type="number" id="discount-original" placeholder="100" oninput="calculateDiscount()">
+              </div>
+              <div class="form-group">
+                <label>折扣率 (%)</label>
+                <input type="number" id="discount-rate" placeholder="20" oninput="calculateDiscount()">
+              </div>
+            </div>
+          </div>
+
+          <div id="percentage-ratio" class="percentage-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label>部分值</label>
+                <input type="number" id="ratio-part" placeholder="25" oninput="calculateRatio()">
+              </div>
+              <div class="form-group">
+                <label>总值</label>
+                <input type="number" id="ratio-total" placeholder="100" oninput="calculateRatio()">
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-result" id="percentage-result" style="display: none;">
+            <div class="result-header">
+              <span>📊</span> 百分比计算结果
+            </div>
+            <div class="result-content" id="percentage-result-content"></div>
+          </div>
+        </div>
       </div>
-      <div class="calc-panel" id="panel-unit">
-        <div class="usage-tip">💡 支持长度、重量、面积、体积、温度等常用单位换算</div>
-        <form class="calc-form" id="form-unit">
-          <label>数值</label>
-          <input type="number" id="unit-value">
-          <label>类型</label>
-          <select id="unit-type">
-            <option value="length">长度</option>
-            <option value="weight">重量</option>
-            <option value="area">面积</option>
-            <option value="volume">体积</option>
-            <option value="temp">温度</option>
-          </select>
-          <label>从</label>
-          <input type="text" id="unit-from" placeholder="如 m, kg, ㎡, ℃">
-          <label>到</label>
-          <input type="text" id="unit-to" placeholder="如 cm, g, 平方英尺, ℉">
-          <button type="submit" class="calc-btn">换算</button>
-        </form>
-        <div class="calc-result" id="result-unit"></div>
-      </div>
-      <div class="calc-panel" id="panel-bmi">
-        <div class="usage-tip">💡 BMI = 体重(kg) / 身高(m)²，健康参考：18.5-24</div>
-        <form class="calc-form" id="form-bmi">
-          <label>身高（cm）</label>
-          <input type="number" id="bmi-height" min="50" max="250">
-          <label>体重（kg）</label>
-          <input type="number" id="bmi-weight" min="10" max="300">
-          <button type="submit" class="calc-btn">计算BMI</button>
-        </form>
-        <div class="calc-result" id="result-bmi"></div>
-      </div>
-      <div class="calc-panel" id="panel-interest">
-        <div class="usage-tip">💡 按单利计算，适用于定期存款等</div>
-        <form class="calc-form" id="form-interest">
-          <label>本金（元）</label>
-          <input type="number" id="interest-principal" min="0">
-          <label>年利率（%）</label>
-          <input type="number" id="interest-rate" min="0" step="0.01">
-          <label>存期（年）</label>
-          <input type="number" id="interest-years" min="0" step="0.01">
-          <button type="submit" class="calc-btn">计算</button>
-        </form>
-        <div class="calc-result" id="result-interest"></div>
+
+      <!-- 时间计算器 -->
+      <div class="calc-panel" id="time">
+        <div class="calc-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>计算类型</label>
+              <select id="time-type" onchange="updateTimeForm()">
+                <option value="duration">时长计算</option>
+                <option value="date">日期计算</option>
+                <option value="age">年龄计算</option>
+              </select>
+            </div>
+          </div>
+          
+          <div id="time-duration" class="time-form">
+            <div class="form-row">
+              <div class="form-group">
+                <label>开始时间</label>
+                <input type="datetime-local" id="duration-start" onchange="calculateDuration()">
+              </div>
+              <div class="form-group">
+                <label>结束时间</label>
+                <input type="datetime-local" id="duration-end" onchange="calculateDuration()">
+              </div>
+            </div>
+          </div>
+
+          <div id="time-date" class="time-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label>基准日期</label>
+                <input type="date" id="date-base" onchange="calculateDate()">
+              </div>
+              <div class="form-group">
+                <label>增加天数</label>
+                <input type="number" id="date-add" placeholder="30" onchange="calculateDate()">
+              </div>
+            </div>
+          </div>
+
+          <div id="time-age" class="time-form" style="display: none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label>出生日期</label>
+                <input type="date" id="birth-date" onchange="calculateAge()">
+              </div>
+              <div class="form-group">
+                <label>计算日期</label>
+                <input type="date" id="age-date" onchange="calculateAge()">
+              </div>
+            </div>
+          </div>
+
+          <div class="calc-result" id="time-result" style="display: none;">
+            <div class="result-header">
+              <span>⏰</span> 时间计算结果
+            </div>
+            <div class="result-content" id="time-result-content"></div>
+          </div>
+        </div>
       </div>
     </div>
   </main>
-  <footer>© 2024 有趣实用工具箱</footer>
 </body>
 </html> 
